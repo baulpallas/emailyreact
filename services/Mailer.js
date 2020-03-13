@@ -6,14 +6,14 @@ class Mailer extends helper.Mail {
   constructor({ subject, recipients }, content) {
     super();
 
-    this.sgApi = sendGrid(keys.sendGridKey);
+    this.sgApi = sendgrid(keys.sendGridKey);
     this.from_email = new helper.Email("no-reply@emaily.com");
     this.subject = subject;
     this.body = new helper.Content("text/html", content);
     this.recipients = this.formatAddresses(recipients);
 
     this.addContent(this.body);
-    this.addClicktracking();
+    this.addClickTracking();
     this.addRecipients();
   }
 
@@ -44,7 +44,8 @@ class Mailer extends helper.Mail {
       path: "/v3/mail/send",
       body: this.toJSON()
     });
-    const response = this.sgApi.API(request);
+    const response = await this.sgApi.API(request);
+    console.log(response);
     return response;
   }
 }
